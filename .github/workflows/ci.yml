@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Deploy
+name: ci
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -28,8 +28,4 @@ jobs:
       run: yarn build
     - name: Test
       run: yarn test
-    - name: Curl Action
-      uses: wei/curl@v1.1.1
-      with:
-        args: -X POST https://api.zeit.co/v1/integrations/deploy/QmRgsYHgKxhdjgtxeQ15TJzTqcTbPpMo7XgBz7Z9K6AvVu/4VRhtj37tM
       
