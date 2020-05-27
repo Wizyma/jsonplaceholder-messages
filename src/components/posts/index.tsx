@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { usePaginatedQuery } from 'react-query';
 import Skeleton from '@material-ui/lab/Skeleton';
 import Typography from '@material-ui/core/Typography';
@@ -13,19 +13,12 @@ export default function Posts() {
   const { pagination, setCount } = usePaginationContext();
   const skeletonsCount = useMemo(() => new Array(10).fill('i').map((item, index) => `${item}-${index}`), []);
 
-  const { status, resolvedData, isFetching } = usePaginatedQuery<{count: number, items: Post[]},[string, number | undefined, number | undefined]>(
-    ['posts', pagination?.page, pagination?.limit],
-    (_, page, limit) => {
-      return fetchPosts(page, limit)
-    },
-  );
-
-  useEffect(() => {
-    if (resolvedData?.count) {
-      setCount?.(resolvedData.count);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resolvedData]);
+  const { status, resolvedData, isFetching } = usePaginatedQuery<
+    Post[],
+    [string, number | undefined, number | undefined]
+  >(['posts', pagination?.page, pagination?.limit], (_, page, limit) => {
+    return fetchPosts(setCount, page, limit);
+  });
 
   if (isFetching) {
     return (
@@ -47,7 +40,7 @@ export default function Posts() {
   return (
     <Grid container spacing={2}>
       {status === 'success' &&
-        resolvedData?.items?.map((item) => (
+        resolvedData?.map((item) => (
           <Grid item key={item.id}>
             <Paper style={{ padding: 10 }}>
               <Typography variant="h5">

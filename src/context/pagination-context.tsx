@@ -4,11 +4,16 @@ import { createContext, useContext, useState, useCallback } from 'react';
 type Pagination = { page: number; limit: number; count: number };
 
 const PaginationContext = createContext<{
-  pagination?: Pagination;
-  onChangePage?: (page: number) => void;
-  onChangeLimit?: (limit: number) => void;
-  setCount?: (count: number) => void;
-}>({});
+  pagination: Pagination;
+  onChangePage: (page: number) => void;
+  onChangeLimit: (limit: number) => void;
+  setCount: (count: number) => void;
+}>({
+  pagination: { page: 1, limit: 10, count: 0 },
+  onChangePage: () => {},
+  onChangeLimit: () => {},
+  setCount: () => {},
+});
 
 export default function PaginationProvider({ children }: { children: React.ReactNode }) {
   const [pagination, setPagination] = useState<{ page: number; limit: number; count: number }>({

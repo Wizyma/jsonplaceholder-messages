@@ -1,4 +1,3 @@
-import { ToastContainer } from 'react-toastify';
 import React from 'react';
 
 import Page from './components/page';
@@ -9,25 +8,15 @@ import PostCreation from './components/post-creation';
 
 function App() {
   return (
-      <React.Fragment>
-        <PaginationProvider>
-          <Page>
-            <PostCreation />
-            <Posts />
-            <Pagination />
-          </Page>
-        </PaginationProvider>
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          />
-      </React.Fragment>
+    <React.Fragment>
+      <PaginationProvider>
+        <Page>
+          <PostCreation />
+          <Posts />
+          <Pagination />
+        </Page>
+      </PaginationProvider>
+    </React.Fragment>
   );
 }
 

@@ -1,11 +1,6 @@
 import { BASE_URL } from '../constants';
 
-export default async function createPost(post: { title: string; body: string }): Promise<{
-  id: number;
-  title: string;
-  body: string;
-  userId: number;
-} | Error> {
+export default async function createPost(post: { title: string; body: string }): Promise<{ id: number }> {
   try {
     const response = await fetch(`${BASE_URL}/posts`, {
       method: 'post',
@@ -14,13 +9,12 @@ export default async function createPost(post: { title: string; body: string }):
         userId: 1,
       }),
       headers: {
-        "Content-type": "application/json; charset=UTF-8"
+        'Content-type': 'application/json; charset=UTF-8',
       },
     });
-    const created = await response.json();
 
-    return created;
+    return response.json();
   } catch (err) {
-    return err as Error;
+    return err;
   }
 }
