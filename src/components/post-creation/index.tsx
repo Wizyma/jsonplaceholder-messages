@@ -23,12 +23,15 @@ export default function PostCreation() {
   const { pagination } = usePaginationContext();
   const { register, handleSubmit } = useForm();
   // @ts-ignore
-  const [mutate] = useMutation(createPost, {
+  const [mutate, { status, error }] = useMutation(createPost, {
     onSuccess: (data) => {
-      queryCache.refetchQueries(['posts', pagination?.page, pagination?.limit]);
-      toast.success(`Post ${data?.id} Crée`, toastConfig);
+      setCreation(!create);
+      if(data?.id) {
+        queryCache.refetchQueries(['posts', pagination?.page, pagination?.limit]);
+        toast.success(`Post ${data?.id} Crée`, toastConfig);
+      }
     },
-    onError: (error) => toast.error(error.message, toastConfig),
+    onError: () => setCreation(!create),
   });
   const [create, setCreation] = useState(false);
   const isFetching = useIsFetching();
@@ -38,22 +41,25 @@ export default function PostCreation() {
   const onSubmit = useCallback(
     (data: { private: boolean; title: string; content: string }) => {
       const { title, content: body } = data;
-      onSetCreation();
       mutate({ title, body });
     },
-    [onSetCreation, mutate],
+    [mutate],
   );
-
+    console.log(error)
   useEffect(() => {
     if (isFetching && create) {
       setCreation(!create);
     }
   }, [create, isFetching]);
 
+  if(error) {
+    toast.error(error.message, toastConfig);
+  }
+
   return (
     <React.Fragment>
       <ToastContainer hideProgressBar={false} closeOnClick rtl={false} />
-      <Button disabled={isFetching === 1} style={{ marginBottom: 10 }} onClick={onSetCreation}>
+      <Button disabled={isFetching === 1 || status !== 'idle'} style={{ marginBottom: 10 }} onClick={onSetCreation}>
         Crée un nouveau post
       </Button>
       {create && (
@@ -83,7 +89,7 @@ export default function PostCreation() {
                 />
               </Grid>
               <Grid item>
-                <Button type="submit">Valider</Button>
+                <Button disabled={status !== 'idle'} type="submit">Valider</Button>
               </Grid>
             </Grid>
           </form>
