@@ -8,6 +8,10 @@ import { usePageStyles } from './styles';
 export default function Page({ children }: { children: React.ReactNode }) {
   const classes = usePageStyles();
 
+  if(!children) {
+    return null;
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
