@@ -1,20 +1,7 @@
-import { BASE_URL } from '../constants';
+import seed from '../seed.json';
 
 export default async function createPost(post: { title: string; body: string }): Promise<{ id: number }> {
-  try {
-    const response = await fetch(`${BASE_URL}/posts`, {
-      method: 'post',
-      body: JSON.stringify({
-        ...post,
-        userId: 1,
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    });
-
-    return response.json();
-  } catch (err) {
-    return err;
-  }
+  const id = seed[seed.length -1 ].id + 1;
+  seed.push({ title: post.title, body: post.body, userId: 3, id })
+  return Promise.resolve({ id })
 }

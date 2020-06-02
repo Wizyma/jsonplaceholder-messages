@@ -1,5 +1,6 @@
+import { act } from 'react-dom/test-utils';
 import { ReactQueryCacheProvider, makeQueryCache } from 'react-query'
-import { render, cleanup, wait } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import React from 'react';
 
 import Component from '..';
@@ -37,8 +38,7 @@ describe(`${Component.name} should pass all test`, () => {
   })
 
   it('render posts with the query state', () => {
-    const getPosts = () => postsMock
-    queryCache.setQueryData(['posts', 1, 10], getPosts)
+    queryCache.setQueryData(['posts', 1, 10], postsMock)
     const { asFragment } = render(<Component />, {
       wrapper: ({ children }) => (
         <Providers>
@@ -47,6 +47,8 @@ describe(`${Component.name} should pass all test`, () => {
       )
     })
     
-    wait(() => expect(asFragment()).toMatchSnapshot())
+    act(() => {
+      expect(asFragment()).toMatchSnapshot()
+    })
   })
 })

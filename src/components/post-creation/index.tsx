@@ -45,7 +45,7 @@ export default function PostCreation() {
     },
     [mutate],
   );
-    console.log(error)
+
   useEffect(() => {
     if (isFetching && create) {
       setCreation(!create);
@@ -59,7 +59,7 @@ export default function PostCreation() {
   return (
     <React.Fragment>
       <ToastContainer hideProgressBar={false} closeOnClick rtl={false} />
-      <Button disabled={isFetching === 1 || status !== 'idle'} style={{ marginBottom: 10 }} onClick={onSetCreation}>
+      <Button disabled={isFetching === 1 || status === 'loading'} style={{ marginBottom: 10 }} onClick={onSetCreation}>
         Crée un nouveau post
       </Button>
       {create && (
@@ -89,7 +89,7 @@ export default function PostCreation() {
                 />
               </Grid>
               <Grid item>
-                <Button disabled={status !== 'idle'} type="submit">Valider</Button>
+                <Button disabled={status === 'loading'} type="submit">Valider</Button>
               </Grid>
             </Grid>
           </form>
